@@ -8,15 +8,27 @@ export const githubApi = createApi({
   }),
   refetchOnFocus: true,
   endpoints: (build) => ({
-    searchUsers: build.query<IUser[], string>({
-      query: (search: string) => ({
+    searchUsers: build.query<IUser[], { search: string; page: number }>({
+      query: ({ search, page }) => ({
         url: 'search/users',
         params: {
           q: search,
           per_page: 10,
+          page,
         },
       }),
       transformResponse: (response: ServerResponse<IUser>) => response.items,
+    }),
+    searchRepos: build.query<IRepo[], { search: string; page: number }>({
+      query: ({ search, page }) => ({
+        url: 'search/repositories',
+        params: {
+          q: search,
+          per_page: 10,
+          page,
+        },
+      }),
+      transformResponse: (response: ServerResponse<IRepo>) => response.items,
     }),
     getUserRepos: build.query<IRepo[], string>({
       query: (username: string) => ({
@@ -33,6 +45,7 @@ export const githubApi = createApi({
 
 export const {
   useSearchUsersQuery,
+  useSearchReposQuery,
   useLazyGetUserReposQuery,
   useLazyGetUserInfoQuery,
 } = githubApi;

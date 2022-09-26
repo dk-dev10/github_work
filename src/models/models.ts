@@ -238,9 +238,3 @@ export interface Item {
   default_branch: string;
   score: number;
 }
-
-export interface RootObject {
-  total_count: number;
-  incomplete_results: boolean;
-  items: Item[];
-}

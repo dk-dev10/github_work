@@ -6,15 +6,17 @@ const UserInfo = ({
   user,
   repos,
   areReposLoading,
+  areUserLoading,
 }: {
   user: IUser;
   repos: IRepo[];
   areReposLoading: boolean;
+  areUserLoading: boolean;
 }) => {
   return (
     <div className='flex w-full max-h-[80%] border shadow-lg rounded-xl shadow-stone-300 min-h-[350px] mt-[10px] p-3 overflow-hidden'>
       {!user ? (
-        <Sceleton />
+        areUserLoading && <Sceleton />
       ) : (
         <>
           <div className='flex flex-col items-center mr-[10px] sticky top-3 max-w-[30%]'>
