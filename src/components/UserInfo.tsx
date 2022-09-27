@@ -5,12 +5,12 @@ import Sceleton from './Sceleton';
 const UserInfo = ({
   user,
   repos,
-  areReposLoading,
+  fetchRepos,
   areUserLoading,
 }: {
   user: IUser;
   repos: IRepo[];
-  areReposLoading: boolean;
+  fetchRepos: boolean;
   areUserLoading: boolean;
 }) => {
   return (
@@ -29,12 +29,11 @@ const UserInfo = ({
           </div>
           <div className='max-h-[80%] overflow-y-scroll max-w-[70%]'>
             <h1>Repos</h1>
-            {areReposLoading && (
+            {fetchRepos ? (
               <p className='text-center '>Repos Loading... </p>
+            ) : (
+              repos?.map((repo) => <RepoCard repo={repo} key={repo.id} />)
             )}
-            {repos?.map((repo) => (
-              <RepoCard repo={repo} key={repo.id} />
-            ))}
           </div>
         </>
       )}

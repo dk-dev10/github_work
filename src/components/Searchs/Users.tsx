@@ -20,7 +20,7 @@ const Users = ({
   const [activeUser, setActiveUser] = useState('');
   const [users, setUsers] = useState<IUser[] | []>([]);
 
-  const { isLoading, isError, data } = useSearchUsersQuery(
+  const { isLoading, isError, data, isFetching: fetchUsers } = useSearchUsersQuery(
     { search: debounced, page },
     {
       skip: debounced.length < 3,
@@ -30,7 +30,7 @@ const Users = ({
   const [fethcUser, { isLoading: areUserLoading, data: userData }] =
     useLazyGetUserInfoQuery();
 
-  const [fetchRepos, { isLoading: areReposLoading, data: repos }] =
+  const [fetchRepos, { data: repos, isFetching }] =
     useLazyGetUserReposQuery();
 
   useEffect(() => {
@@ -42,10 +42,9 @@ const Users = ({
       if (res.id !== dRes.id) {
         setUsers((arr) => [...arr, ...data]);
       }
-      console.log(data);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, page]);
-  console.log(users);
 
   const clickHandler = (username: string) => {
     fethcUser(username);
@@ -70,8 +69,9 @@ const Users = ({
         ))}
         {data && data.length >= 10 && (
           <button
-            className='mb-[50px] border p-2 px-3 border-black '
+            className={`mb-[50px] border p-2 px-3 border-black ${fetchUsers && 'opacity-30'} `}
             onClick={() => handler()}
+            disabled={fetchUsers}
           >
             Загрузить ещё
           </button>
@@ -82,7 +82,7 @@ const Users = ({
           <UserInfo
             user={userData}
             repos={repos ? repos : []}
-            areReposLoading={areReposLoading}
+            fetchRepos={isFetching}
             areUserLoading={areUserLoading}
           />
         )}
